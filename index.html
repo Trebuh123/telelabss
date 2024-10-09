@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sklep z Telebimami</title>
+    <style>
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                url('tlo.png'); /* Podmień na swój obraz */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            transition: background-position 0.1s ease-out,;
+            font-size: 1em;
+            margin: 0;
+                overflow-x: hidden; /* Ukryj przewijanie poziome */
+        }
+        h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+            animation: fadeInDown 1s forwards;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border-radius: 0 0 15px 15px; /* Zaokrąglone boki - dolne rogi */
+            flex-direction: column;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #555;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #777;
+        }
+        .cart-icon {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+        .cart-icon img {
+            width: 40px;
+            height: auto;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 2rem;
+        
+        }
+        
+        .product {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+            overflow: hidden;
+            display: flex;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .product img {
+            width: 350px;
+            height: 350px;
+            border-radius: 5px;
+        }
+        .product-details {
+            padding: 1rem;
+            flex: 1;
+        }
+        .product-details h2 {
+            margin: 0 0 0.5rem;
+        }
+        .product-details p {
+            margin: 0 0 1rem;
+        }
+        .product-details .price {
+            font-size: 1.5rem;
+            color: #e60000;
+            margin-bottom: 1rem;
+        }
+        .product-details button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            position: relative;
+            width: 100%;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .modal-content .remove-btn {
+            cursor: pointer;
+            color: red;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 25px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #e60000;
+        }
+        .cart-modal {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 80%;
+            max-width: 500px;
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            z-index: 2;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .cart-modal.show {
+            display: flex;
+        }
+        .cart-modal button {
+            background-color: #e60000;
+            color: #fff;
+            border: none;
+            padding: 0.7rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .cart-modal button:hover {
+            background-color: #c60000;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .tile:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+  
+    </style>
+        <script>
+            document.addEventListener('mousemove', function(e) {
+                // Oblicz procentowe przesunięcie w poziomie i pionie na podstawie pozycji kursora
+                const x = (e.clientX / window.innerWidth) * 30;
+                const y = (e.clientY / window.innerHeight) * 30;
+            
+                // Ustaw nową pozycję tła
+                document.body.style.backgroundPosition = `${x}% ${y}%`;
+            });
+            </script>
+</head>
+<body>
+    <header>
+        <h1>Sklep z Telebimami</h1>
+        <nav>
+            <a href="index.html" class="button-link">Sklep</a>
+        </nav>
+        <a href="#koszyk" class="cart-icon">
+            <img src="cart.png" alt="Koszyk">
+        </a>
+    </header>
+
+    <div class="container" id="sklep">
+        <section class="product">
+            <img src="telebim.jpg" alt="Telebim Model C">
+            <div class="product-details">
+                <h2>Telebim X</h2>
+                <p>Nowoczesny telebim nadający się do największych festiwali oraz imprez.</p>
+                <div class="price">OD 4500 PLN ZA 1m²</div>
+                <button class="buy-btn" data-url="jeden_produkt.html">Kup Teraz</button>
+            </div>
+        </section>
+        <section class="product">
+            <img src="telebim2.jpg" alt="Telebim Model B">
+            <div class="product-details">
+                <h2>Telebim Y</h2>
+                <p>Telebim o dużej rozdzielczości, doskonały do zastosowań w centrach handlowych.</p>
+                <div class="price">OD 2000 PLN ZA 1m²</div>
+                <button class="buy-btn" data-url="drugi_produkt.html">Kup Teraz</button>
+            </div>
+        </section>
+
+        <section class="product">
+            <img src="telebim3.jpg" alt="Telebim Model A">
+            <div class="product-details">
+                <h2>Telebim Z</h2>
+                <p>Wysokiej jakości telebim idealny do wydarzeń niestandardowych wewnętrznych jak i zewnętrznych.</p>
+                <div class="price">OD 6200 PLN ZA 1m²</div>
+                <button class="buy-btn" data-url="trzeci_produkt.html">Kup Teraz</button>
+            </div>  
+        </section>
+    </div>
+
+    <div id="cart-modal" class="cart-modal">
+        <h2>Twój Koszyk</h2>
+        <div id="cart-items"></div>
+        <button onclick="closeCart()">Zamknij</button>
+    </div>
+</div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Sklep z Telebimami. Wszystkie prawa zastrzeżone.</p>
+    </footer>
+
+    <script>
+        // Function to add item to cart
+        function addToCart(item) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert("Dodano do koszyka!");
+            updateCart();
+        }
+
+        // Function to update cart modal (display items in cart)
+        function updateCart() {
+            const cartModal = document.getElementById('cart-modal');
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContainer = document.getElementById('cart-items');
+
+            cartContainer.innerHTML = ''; // Clear existing items
+
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = '<p>Twój koszyk jest pusty.</p>';
+                return;
+            }
+
+            // Display products in cart
+            cartItems.forEach((item, index) => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <span>${item.width}x${item.height}m - ${item.location} - ${item.price} PLN</span>
+                    <button class="remove-btn" data-index="${index}">X</button>
+                `;
+                cartContainer.appendChild(cartItem);
+            });
+
+            // Add event listeners to all "X" buttons
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', removeFromCart);
+            });
+
+            cartModal.classList.add('show');
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(event) {
+            const index = event.target.getAttribute('data-index');
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            cartItems.splice(index, 1); // Remove item from array
+            localStorage.setItem('cart', JSON.stringify(cartItems)); // Update cart
+
+            updateCart(); // Refresh cart view after removal
+        }
+
+        // Function to show cart modal
+        function showCart() {
+            updateCart();
+        }
+
+        // Function to close cart modal
+        function closeCart() {
+            document.getElementById('cart-modal').classList.remove('show');
+        }
+
+        // Redirect function
+        function redirectToPage(url) {
+            window.location.href = url;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.buy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    redirectToPage(url);
+                });
+            });
+
+            document.querySelector('.cart-icon img').addEventListener('click', showCart); // Cart icon
+            document.querySelector('#cart-modal button').addEventListener('click', closeCart); // Close cart
+        });
+    </script>
+    
+</body>
+</html>

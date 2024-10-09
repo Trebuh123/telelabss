@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sklep z Telebimami - Twoje Konto</title>
+    <style>
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                url('tlo.png'); /* Podmień na swój obraz */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            font-size: 1em;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+            animation: fadeInDown 1s forwards;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border-radius: 0 0 15px 15px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #555;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #777;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #ff4d4d;
+            color: #fff;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+        main {
+            margin-top: 60px;
+            width: 70%;
+            max-width: 700px;
+            background: rgba(65, 60, 60, 0.6);
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .show-password {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .show-password input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+        .calendar-container {
+            display: none;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Twoje Konto</h1>
+        <button class="logout-btn" id="logoutBtn">X</button> <!-- Guzik wylogowania -->
+        <nav>
+            <a href="O_nas.html" class="button-link">O nas</a>
+            <a href="sklep.html" class="button-link">Sklep</a>
+            <a href="index.html" class="button-link">Strona główna</a>
+            <a href="twoje_konto.html" class="button-link">Twoje Konto</a>
+            <a href="kontakt.html" class="button-link">Kontakt</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Profil użytkownika -->
+        <section class="form-section">
+            <h2>Profil</h2>
+            <form id="profileForm">
+                <label for="profileUsername">Nazwa użytkownika</label>
+                <input type="text" id="profileUsername" name="username" required>
+
+                <label for="profileEmail">Adres e-mail</label>
+                <input type="email" id="profileEmail" name="email" required>
+
+                <label for="profilePassword">Hasło (min. 8 znaków)</label>
+                <input type="password" id="profilePassword" name="password" minlength="8" required>
+
+                <!-- Opcja pokaż/ukryj hasło -->
+                <div class="show-password">
+                    <input type="checkbox" id="showPasswordCheckbox">
+                    <label for="showPasswordCheckbox">Pokaż hasło</label>
+                </div>
+
+                <label for="profileFirstName">Imię</label>
+                <input type="text" id="profileFirstName" name="firstName" required>
+
+                <label for="profileLastName">Nazwisko</label>
+                <input type="text" id="profileLastName" name="lastName" required>
+
+                <label for="profileAddress">Adres</label>
+                <input type="text" id="profileAddress" name="address" required>
+
+                <label for="paymentMethod">Rodzaj płatności</label>
+                <select id="paymentMethod" name="paymentMethod">
+                    <option value="blik">Blik</option>
+                    <option value="przelew">Przelew</option>
+                    <option value="natychmiastowy">Przelew natychmiastowy</option>
+                    <option value="odbior">Płatność przy odbiorze</option>
+                    <option value="spotkanie">Indywidualne spotkanie</option>
+                </select>
+
+                <!-- Kalendarz dla indywidualnego spotkania -->
+                <div class="calendar-container" id="calendarContainer">
+                    <label for="meetingDate">Wybierz datę spotkania</label>
+                    <input type="date" id="meetingDate" name="meetingDate">
+                </div>
+
+                <button type="submit">Zapisz zmiany</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Automatyczne logowanie
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (!loggedInUser) {
+                window.location.href = 'login.html'; // Jeśli brak zalogowanego użytkownika, przekieruj na stronę logowania
+            } else {
+                // Wyświetl dane użytkownika
+                document.getElementById('profileUsername').value = loggedInUser.username;
+                document.getElementById('profileEmail').value = loggedInUser.email;
+                document.getElementById('profilePassword').value = loggedInUser.password;
+                document.getElementById('profileFirstName').value = loggedInUser.firstName;
+                document.getElementById('profileLastName').value = loggedInUser.lastName;
+                document.getElementById('profileAddress').value = loggedInUser.address;
+                document.getElementById('paymentMethod').value = loggedInUser.paymentMethod;
+            }
+        });
+
+        // Pokaż/ukryj hasło
+        document.getElementById('showPasswordCheckbox').addEventListener('change', function() {
+            const passwordInput = document.getElementById('profilePassword');
+            passwordInput.type = this.checked ? 'text' : 'password';
+        });
+
+        // Wylogowanie
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = 'twoje_konto.html'; // Przekierowanie na stronę logowania
+        });
+
+        // Pokazanie kalendarza dla indywidualnego spotkania
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            const calendarContainer = document.getElementById('calendarContainer');
+            if (this.value === 'spotkanie') {
+                calendarContainer.style.display = 'block';
+            } else {
+                calendarContainer.style.display = 'none';
+            }
+        });
+
+        // Zapisz zmiany w profilu
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('profileUsername').value;
+            const email = document.getElementById('profileEmail').value;
+            const password = document.getElementById('profilePassword').value;
+            const firstName = document.getElementById('profileFirstName').value;
+            const lastName = document.getElementById('profileLastName').value;
+            const address = document.getElementById('profileAddress').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const meetingDate = document.getElementById('meetingDate').value;
+
+            const userData = {
+                username,
+                email,
+                password,
+                firstName,
+                lastName,
+                address,
+                paymentMethod,
+                meetingDate
+            };
+
+            localStorage.setItem('loggedInUser', JSON.stringify(userData));
+            alert('Zapisano zmiany');
+        });
+    </script>
+</body>
+</html>

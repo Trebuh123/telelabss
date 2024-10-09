@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O nas - Sklep z Telebimami</title>
+    <style>
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                url('tlo.png'); /* Podmień na swój obraz */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            transition: background-position 0.1s ease-out;
+            font-size: 1em;
+            margin: 0;
+            overflow-x: hidden; /* Ukryj przewijanie poziome */
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border-radius: 0 0 15px 15px; /* Zaokrąglone boki - dolne rogi */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #555;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #777;
+        }
+
+        h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 2rem; /* Zmniejszony rozmiar tytułu */
+            padding: 0.5rem 0;
+        }
+
+        .cart-icon {
+            display: none; /* Ukryj ikonę koszyka */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title-section h2 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .about-card {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer; /* Dodaj wskaźnik kursora */
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .about-card p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            animation: scaleUp 0.3s ease-out;
+        }
+
+        .modal-content h4 {
+            margin-top: 0;
+        }
+
+        .modal-content p {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #e60000;
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 3rem;
+            width: 100%;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        }
+                .cart-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+        }
+        .cart-container h1 {
+            margin-top: 0;
+            color: #333;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item span {
+            flex: 1;
+        }
+        .cart-item button {
+            background-color: #e60000;
+            color: #fff;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .cart-item button:hover {
+            background-color: #c60000;
+        }
+        .cart-footer {
+            margin-top: 1rem;
+            text-align: right;
+        }
+        .cart-footer button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .cart-footer button:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-icon img {
+                width: 25px;
+            }
+
+            h1 {
+                font-size: 1.5rem; /* Zmniejszony rozmiar na urządzeniach mobilnych */
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('mousemove', function(e) {
+            const x = (e.clientX / window.innerWidth) * 30;
+            const y = (e.clientY / window.innerHeight) * 30;
+            document.body.style.backgroundPosition = `${x}% ${y}%`;
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.about-card');
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.modal-content');
+            const modalClose = document.querySelector('.modal-close');
+
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const title = this.querySelector('h3').innerText;
+                    const description = this.getAttribute('data-description');
+
+                    modalContent.innerHTML = `
+                        <span class="modal-close">&times;</span>
+                        <h4>${title}</h4>
+                        <p>${description}</p>
+                    `;
+
+                    modal.classList.add('active');
+                });
+            });
+
+            modalClose.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="sklep.html" class="button-link">Sklep</a>
+        </nav>
+        <h1>Sklep z Telebimami</h1>
+        <a href="#" class="cart-icon">
+            <img src="cart.png" alt="Koszyk">
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="title-section">
+            <h2>Poznaj naszą firmę</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-card" data-description="Od lat dostarczamy nowoczesne rozwiązania LED na rynku, oferując telebimy najwyższej jakości. Nasza misja to dostarczenie najlepszego sprzętu, który sprosta każdemu wyzwaniu.">
+                <h3>Nasza Misja</h3>
+                <p>Od lat dostarczamy nowoczesne rozwiązania LED na rynku.</p>
+            </div>
+            <div class="about-card" data-description="Stawiamy na innowacje i jakość, aby zapewnić naszym klientom produkty, które będą nie tylko nowoczesne, ale także trwałe i efektywne.">
+                <h3>Nasza Wizja</h3>
+                <p>Stawiamy na innowacje i jakość.</p>
+            </div>
+            <div class="about-card" data-description="Nasza firma to zespół pasjonatów technologii LED, którzy nieustannie pracują nad udoskonalaniem naszych produktów i usług.">
+                <h3>Nasza Ekipa</h3>
+                <p>Pasja do technologii LED i doskonałość w każdym detalu.</p>
+            </div>
+            <div class="about-card" data-description="Innowacyjność i kreatywność są w centrum naszych działań. Ciągle dążymy do odkrywania nowych rozwiązań technologicznych i przekształcania pomysłów w rzeczywistość.">
+                <h3>Innowacyjność</h3>
+                <p>Ciężko pracujemy, aby być na czołowej linii innowacji.</p>
+            </div>
+            <div class="about-card" data-description="Z naszym doświadczeniem zdobytym w ciągu wielu lat obecności na rynku, oferujemy naszym klientom najlepsze doradztwo i wsparcie na każdym etapie współpracy.">
+                <h3>Doświadczenie</h3>
+                <p>Wieloletnie doświadczenie w branży LED.</p>
+            </div>
+            <div class="about-card" data-description="Nasze wartości obejmują zaufanie, transparentność i zaangażowanie w każdym projekcie. Dążymy do budowania długotrwałych relacji z naszymi klientami.">
+                <h3>Nasze Wartości</h3>
+                <p>Zaufanie, transparentność, zaangażowanie.</p>
+            </div>
+            <div class="about-card" data-description="Oto nasze wybrane realizacje, które pokazują zakres naszych możliwości i jakość naszych produktów. Każdy projekt to dowód naszej pasji i zaangażowania. -- Open'er24/23/22 -- SunFestival -- Dożynki Wiejskie w Głupczycach...">
+                <h3>Realizacje</h3>
+                <p>Przykłady naszych udanych projektów i wdrożeń.</p>
+            </div>
+            <div class="about-card" data-description="Opinie naszych klientów są dla nas niezwykle ważne. Szanujemy wasze każde zdanie i staramy się zmieniać na lepsze.">
+                <h3>Opinie Klientów</h3>
+                <p>Wiadomosci zadowolonych klientów.</p>
+            </div>
+            <div class="about-card" data-description="Skontaktuj się z nami, jeśli masz pytania lub chcesz dowiedzieć się więcej o naszych produktach i usługach. Jesteśmy tu, aby Ci pomóc!">
+                <h3>Kontakt</h3>
+                <p>Formularz kontaktowy i dane kontaktowe.</p>
+            </div>
+        </div>
+        
+        
+    </div>
+
+    <div class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h4>Tytuł</h4>
+            <p>Treść</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Sklep z Telebimami</p>
+    </footer>
+</body>
+</html>

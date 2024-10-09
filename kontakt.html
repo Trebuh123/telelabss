@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sklep z Telebimami - Kontakt</title>
+    <style>
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                url('tlo.png'); /* Podmień na swój obraz */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            font-size: 1em;
+            margin: 0;
+            overflow-x: hidden; /* Ukryj przewijanie poziome */
+        }
+        h1, h2 {
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border-radius: 0 0 15px 15px;
+            flex-direction: column;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #555;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #777;
+        }
+        main {
+            margin-top: 60px;
+            width: 70%;
+            max-width: 700px;
+            background: rgba(65, 60, 60, 0.6);
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        input, textarea {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+        <nav>
+            <a href="O_nas.html" class="button-link">O nas</a>
+            <a href="sklep.html" class="button-link">Sklep</a>
+            <a href="index.html" class="button-link">Strona główna</a>
+            <a href="twoje_konto.html" class="button-link">Twoje Konto</a>
+            <a href="kontakt.html" class="button-link">Kontakt</a>
+        </nav>
+        <h1>Kontakt</h1>
+    </header>
+
+    <main>
+        <h2>Skontaktuj się z nami</h2>
+        <form id="contactForm">
+            <label for="name">Imię i nazwisko</label>
+            <input type="text" id="name" name="name" placeholder="Wpisz swoje imię i nazwisko" required>
+
+            <label for="email">Adres e-mail</label>
+            <input type="email" id="email" name="email" placeholder="Wpisz swój adres e-mail" required>
+
+            <label for="message">Wiadomość</label>
+            <textarea id="message" name="message" rows="5" placeholder="Wpisz swoją wiadomość" required></textarea>
+
+            <button type="submit">Wyślij wiadomość</button>
+        </form>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <script>
+        // Inicjalizacja EmailJS
+        (function() {
+            emailjs.init("OTCrMeiOW7wz3Bl-R"); // Podmień na swój User ID z EmailJS
+        })();
+
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Wysłanie formularza
+            emailjs.sendForm('service_njfei0i', 'template_uvf0x0d', this)
+                .then(function() {
+                    alert('Wiadomość została wysłana!');
+                }, function(error) {
+                    alert('Nie udało się wysłać wiadomości: ' + JSON.stringify(error));
+                });
+        });
+    </script>
+</body>
+</html>
